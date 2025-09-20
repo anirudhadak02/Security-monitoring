@@ -1,0 +1,19 @@
+apiVersion: platform.stackrox.io/v1alpha1
+kind: Central
+metadata:
+  name: stackrox-central-services
+  namespace: rhacs-operator
+spec:
+  central:
+    exposure:
+      route:
+        enabled: true
+        reencrypt:
+          enabled: false
+  scannerV4:
+    indexer:
+      scaling:
+        replicas: 1
+    matcher:
+      scaling:
+        replicas: 1
