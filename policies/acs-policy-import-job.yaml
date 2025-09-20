@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: acs-policy-import
+  namespace: rhacs-operator
+spec:
+  template:
+    spec:
+      serviceAccountName: central   # Ensure SA has minimal permissions (or remove if not needed)
+      containers:
+      - name: policy-import
+        image: quay.io/stackrox/roxctl:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            CENTRAL_HOST=$(cat /creds/central_host)
+            TOKEN=$(cat /creds/api_token)
+
+            roxctl central policy import \
+              --insecure-skip-tls-verify \
+              --file /policies \
+              -e "$CENTRAL_HOST:443" \
+              --token "$TOKEN"
+        volumeMounts:
+        - name: creds
+          mountPath: /creds
+          readOnly: true
+        - name: policies
+          mountPath: /policies
+          readOnly: true
+      restartPolicy: Never
+      volumes:
+      - name: creds
+        secret:
+          secretName: acs-api-credentials
+      - name: policies
+        configMap:
+          name: acs-policies
