@@ -15,12 +15,15 @@ spec:
           - |
             CENTRAL_HOST=$(cat /creds/central_host)
             TOKEN=$(cat /creds/api_token)
-
-            roxctl central policy import \
-              --insecure-skip-tls-verify \
-              --file /policies \
-              -e "$CENTRAL_HOST:443" \
-              --token "$TOKEN"
+            for f in /policies/*.json; do
+              echo "Importing $f"
+              roxctl central policy import \
+                --insecure-skip-tls-verify \
+                -e "$CENTRAL_HOST:443" \
+                --token "$TOKEN" \
+                --file "$f"
+            done
+            
         volumeMounts:
         - name: creds
           mountPath: /creds
