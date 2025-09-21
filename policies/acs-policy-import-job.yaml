@@ -9,7 +9,7 @@ spec:
       serviceAccountName: central   # Ensure SA has minimal permissions (or remove if not needed)
       containers:
       - name: policy-import
-        image: quay.io/stackrox/roxctl:latest
+        image: image: quay.io/stackrox/main:4.4.3
         command: ["/bin/sh", "-c"]
         args:
           - |
