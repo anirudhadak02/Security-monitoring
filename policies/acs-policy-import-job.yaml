@@ -1,14 +1,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: acs-policy-import
+  name: acs-policy-update
   namespace: rhacs-operator
 spec:
   template:
     spec:
-      serviceAccountName: central   # Keep if you need, else can drop
+      serviceAccountName: central
       containers:
-      - name: policy-import
+      - name: policy-update
         image: curlimages/curl:8.5.0
         command: ["/bin/sh", "-c"]
         args:
@@ -17,12 +17,19 @@ spec:
             TOKEN=$(cat /creds/api_token)
 
             for f in /policies/*.json; do
-              echo "Importing $f"
-              curl -sk -X POST \
-                -H "Authorization: Bearer $TOKEN" \
-                -H "Content-Type: application/json" \
-                --data @"$f" \
-                "https://$CENTRAL_HOST/v1/policies"
+              echo "Processing $f"
+              # Extract ID from JSON file
+              id=$(jq -r '.id' "$f")
+              if [ -n "$id" ] && [ "$id" != "null" ]; then
+                echo "Updating policy ID: $id"
+                curl -sk -X PUT \
+                  -H "Authorization: Bearer $TOKEN" \
+                  -H "Content-Type: application/json" \
+                  --data-binary @"$f" \
+                  "https://$CENTRAL_HOST/v1/policies/$id"
+              else
+                echo "No ID found in $f — skipping"
+              fi
             done
         volumeMounts:
         - name: creds
@@ -35,8 +42,7 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: acs-api-credentials   # must contain central_host and api_token keys
+          secretName: acs-api-credentials
       - name: policies
         configMap:
-          name: acs-policies                # must contain your policy JSONs
-
+          name: acs-policies
