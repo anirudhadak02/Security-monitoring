@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: acs-policy-drift-check
+  namespace: rhacs-operator
+spec:
+  schedule: "0 * * * *" # runs every hour
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: acs-policy-checker
+          restartPolicy: OnFailure
+          containers:
+            - name: drift-check
+              image: registry.redhat.io/openshift4/ose-cli:latest
+              imagePullPolicy: Always
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  echo "Starting ACS policy drift check..."
+                  # Clone or pull the Git repo containing the desired policy ConfigMaps
+                  git clone https://github.com/your-org/acs-policies.git /tmp/acs-policies || (cd /tmp/acs-policies && git pull)
+                  # Iterate over all policy files
+                  for policy in /tmp/acs-policies/*.json; do
+                    policy_name=$(basename $policy)
+                    # Check current configmap
+                    kubectl get configmap acs-policies -n rhacs-operator -o jsonpath="{.data.$policy_name}" > /tmp/current_$policy_name
+                    # Compare with git version
+                    if ! diff -q /tmp/current_$policy_name $policy > /dev/null; then
+                      echo "DRIFT DETECTED in $policy_name"
+                      # Optional: send alert via webhook, Slack, or push notification
+                    fi
+                  done
+                  echo "ACS policy drift check completed."
