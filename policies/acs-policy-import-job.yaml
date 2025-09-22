@@ -9,7 +9,7 @@ spec:
       serviceAccountName: central
       containers:
       - name: policy-update
-        image: quay.io/bitnami/minideb:latest   # Includes both jq + curl
+        image: registry.access.redhat.com/ubi9/ubi-minimal:9.3    # Includes both jq + curl
         command: ["/bin/sh", "-c"]
         args:
           - |
