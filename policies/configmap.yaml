@@ -5,86 +5,22 @@ metadata:
   namespace: rhacs-operator
 data:
   env-var-contains-secret.json: |
-    {
-      "id": "f4996314-c3d7-4553-803b-b24ce7febe48",
-      "name": "Environment Variable Contains Secret",
-      "description": "Alert on deployments with environment variables that contain 'SECRET'",
-      "rationale": "Using secrets in environment variables may allow inspection into your secrets from the host or even through the orchestrator UI.",
-      "remediation": "Migrate your secrets from environment variables to orchestrator secrets or your security team's secret management solution.",
-      "disabled": false,
-      "severity": "HIGH_SEVERITY",
-      "categories": ["Security Best Practices"],
-      "lifecycleStages": ["DEPLOY"]
-    }
+    { "id": "f4996314-c3d7-4553-803b-b24ce7febe48", "name": "Environment Variable Contains Secret", "description": "Alert on deployments with environment variables that contain 'SECRET'", "rationale": "Using secrets in environment variables may allow inspection into your secrets from the host or even through the orchestrator UI.", "remediation": "Migrate your secrets from environment variables to orchestrator secrets or your security team's secret management solution.", "disabled": false, "categories": ["Security Best Practices"], "lifecycleStages": ["DEPLOY"], "eventSource": "NOT_APPLICABLE", "exclusions": [ ... ], "scope": [], "severity": "HIGH_SEVERITY", "enforcementActions": [], "notifiers": [], "policyVersion": "1.1", "policySections": [ { "sectionName": "", "policyGroups": [ { "fieldName": "Environment Variable", "booleanOperator": "OR", "negate": false, "values": [ { "value": "RAW=.*SECRET.*|.*PASSWORD.*=" } ] } ] } ], "criteriaLocked": true, "mitreVectorsLocked": true, "isDefault": true, "source": "IMPERATIVE" }
+
   fixable-important-cves.json: |
-    {
-      "id": "a919ccaf-6b43-4160-ac5d-a405e1440a41",
-      "name": "Fixable Severity at least Important",
-      "description": "Alert on deployments with fixable vulnerabilities with a Severity Rating at least Important",
-      "rationale": "Known vulnerabilities make it easier for adversaries to exploit your application. You can fix these high-severity vulnerabilities by updating to a newer version of the affected component(s).",
-      "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.",
-      "disabled": false,
-      "severity": "HIGH_SEVERITY",
-      "categories": ["Vulnerability Management"],
-      "lifecycleStages": ["BUILD","DEPLOY"]
-    }
+    { "id": "a919ccaf-6b43-4160-ac5d-a405e1440a41", "name": "Fixable Severity at least Important", "description": "Alert on deployments with fixable vulnerabilities with a Severity Rating at least Important", "rationale": "Known vulnerabilities make it easier for adversaries to exploit your application. You can fix these high-severity vulnerabilities by updating to a newer version of the affected component(s).", "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.", "disabled": false, "categories": ["Vulnerability Management"], "lifecycleStages": ["BUILD","DEPLOY"], "eventSource": "NOT_APPLICABLE", "exclusions": [], "scope": [], "severity": "HIGH_SEVERITY", "enforcementActions": ["FAIL_BUILD_ENFORCEMENT"], "notifiers": [], "policyVersion": "1.1", "policySections": [ { "sectionName": "", "policyGroups": [ { "fieldName": "Fixed By", "booleanOperator": "OR", "negate": false, "values": [ { "value": ".*" } ] }, { "fieldName": "Severity", "booleanOperator": "OR", "negate": false, "values": [ { "value": ">= IMPORTANT" } ] } ] } ], "criteriaLocked": true, "mitreVectorsLocked": true, "isDefault": true, "source": "IMPERATIVE" }
+
   privilege-escalation.json: |
-    {
-      "id": "16c95922-08c4-41b6-a721-dc4b2a806632",
-      "name": "Container with privilege escalation allowed",
-      "description": "Alerts if a deployment has containers with allowPrivilegeEscalation set to true in its security context.",
-      "rationale": "A container process can run with more privileges than its parent process if the container's security context has the boolean setting allowPrivilegeEscalation enabled. In Kubernetes pods, this setting is true by default. Set the value to false if the pod is to run as a non-root user.",
-      "remediation": "Verify that privileged escalation is required and cannot be provided with a subset of other controls. Disable privilege escalation by setting allowPrivilegeEscalation to false.",
-      "disabled": false,
-      "severity": "MEDIUM_SEVERITY",
-      "categories": ["Privileges","Security Best Practices"],
-      "lifecycleStages": ["DEPLOY"] 
-    }
+    { "id": "16c95922-08c4-41b6-a721-dc4b2a806632", "name": "Container with privilege escalation allowed", "description": "Alerts if a deployment has containers with allowPrivilegeEscalation set to true in its security context.", "rationale": "A container process can run with more privileges than its parent process if the container's security context has the boolean setting allowPrivilegeEscalation enabled. In Kubernetes pods, this setting is true by default. Set the value to false if the pod is to run as a non-root user.", "remediation": "Verify that privileged escalation is required and cannot be provided with a subset of other controls. Disable privilege escalation by setting allowPrivilegeEscalation to false.", "disabled": false, "categories": ["Privileges","Security Best Practices"], "lifecycleStages": ["DEPLOY"], "eventSource": "NOT_APPLICABLE", "exclusions": [ ... ], "scope": [], "severity": "MEDIUM_SEVERITY", "enforcementActions": [], "notifiers": [], "policyVersion": "1.1", "policySections": [ { "sectionName": "Policy Section 1", "policyGroups": [ { "fieldName": "Allow Privilege Escalation", "booleanOperator": "OR", "negate": false, "values": [ { "value": "true" } ] } ] } ], "criteriaLocked": true, "mitreVectorsLocked": true, "isDefault": true, "source": "IMPERATIVE" }
+
   privileged-container.json: |
-    {
-      "id": "fe9de18b-86db-44d5-a7c4-74173ccffe2e",
-      "name": "Privileged Container",
-      "description": "Alert on deployments with containers running in privileged mode",
-      "rationale": "Containers running as privileged represent greater post-exploitation risk by allowing an attacker to access all host devices, run a daemon in the container, etc.",
-      "remediation": "Verify that privileged capabilities are required and cannot be provided with a subset of other controls.",
-      "disabled": false,
-      "severity": "MEDIUM_SEVERITY",
-      "categories": ["Docker Cis","Privileges"],
-      "lifecycleStages": ["DEPLOY"] 
-    }
+    { "id": "fe9de18b-86db-44d5-a7c4-74173ccffe2e", "name": "Privileged Container", "description": "Alert on deployments with containers running in privileged mode", "rationale": "Containers running as privileged represent greater post-exploitation risk by allowing an attacker to access all host devices, run a daemon in the container, etc.", "remediation": "Verify that privileged capabilities are required and cannot be provided with a subset of other controls.", "disabled": false, "categories": ["Docker Cis","Privileges"], "lifecycleStages": ["DEPLOY"], "eventSource": "NOT_APPLICABLE", "exclusions": [ ... ], "scope": [], "severity": "MEDIUM_SEVERITY", "enforcementActions": [], "notifiers": [], "policyVersion": "1.1", "policySections": [ { "sectionName": "", "policyGroups": [ { "fieldName": "Privileged Container", "booleanOperator": "OR", "negate": false, "values": [ { "value": "true" } ] } ] } ], "criteriaLocked": true, "mitreVectorsLocked": true, "isDefault": true, "source": "IMPERATIVE" }
+
   process-targeting-kubelet.json: |
-    {
-      "id": "86804b96-e87e-4eae-b56e-1718a8a55763",
-      "name": "Process Targeting Cluster Kubelet Endpoint",
-      "description": "Detects misuse of the healthz/kubelet API/heapster endpoint",
-      "rationale": "A pod communicating to a Kubernetes API from via command line is highly irregular",
-      "remediation": "Look for open ports that may allow remote execution. Remove network utilities like curl and wget that allow these connections. Consider a firewall deny ingress firewall rule to the node serving the API",
-      "disabled": false,
-      "severity": "HIGH_SEVERITY",
-      "categories": ["Kubernetes"],
-      "lifecycleStages": ["RUNTIME"]
-    }
+    { "id": "86804b96-e87e-4eae-b56e-1718a8a55763", "name": "Process Targeting Cluster Kubelet Endpoint", "description": "Detects misuse of the healthz/kubelet API/heapster endpoint", "rationale": "A pod communicating to a Kubernetes API from via command line is highly irregular", "remediation": "Look for open ports that may allow remote execution. Remove network utilities like curl and wget that allow these connections. Consider a firewall deny ingress firewall rule to the node serving the API", "disabled": false, "categories": ["Kubernetes"], "lifecycleStages": ["RUNTIME"], "eventSource": "DEPLOYMENT_EVENT", "exclusions": [], "scope": [], "severity": "HIGH_SEVERITY", "enforcementActions": [], "notifiers": [], "policyVersion": "1.1", "policySections": [ { "sectionName": "", "policyGroups": [ { "fieldName": "Process Arguments", "booleanOperator": "OR", "negate": false, "values": [ { "value": "(https?://)?(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\:(10250|10248|10255)|heapster\\.kube\\-system/metrics|KUBERNETES_PORT_443_TCP_ADDR|KUBERNETES_SERVICE_HOST).*" } ] } ] } ], "mitreAttackVectors": [ { "tactic": "TA0007", "techniques": ["T1613"] } ], "criteriaLocked": true, "mitreVectorsLocked": true, "isDefault": true, "source": "IMPERATIVE" }
+
   unauthorized-network-flow.json: |
-    {
-      "id": "1b74ffdd-8e67-444c-9814-1c23863c8ccb",
-      "name": "Unauthorized Network Flow",
-      "description": "This policy generates a violation for the network flows that fall outside baselines for which 'alert on anomalous violations' is set.",
-      "rationale": "The network baseline is a list of flows that are allowed, and once it is frozen, any flow outside that is a concern.",
-      "remediation": "Evaluate this network flow. If deemed to be okay, add it to the baseline. If not, investigate further as required.",
-      "disabled": false,
-      "severity": "HIGH_SEVERITY",
-      "categories": ["Anomalous Activity","Zero Trust"],
-      "lifecycleStages": ["RUNTIME"]
-    }
+    { "id": "1b74ffdd-8e67-444c-9814-1c23863c8ccb", "name": "Unauthorized Network Flow", "description": "This policy generates a violation for the network flows that fall outside baselines for which 'alert on anomalous violations' is set.", "rationale": "The network baseline is a list of flows that are allowed, and once it is frozen, any flow outside that is a concern.", "remediation": "Evaluate this network flow. If deemed to be okay, add it to the baseline. If not, investigate further as required.", "disabled": false, "categories": ["Anomalous Activity","Zero Trust"], "lifecycleStages": ["RUNTIME"], "eventSource": "DEPLOYMENT_EVENT", "exclusions": [], "scope": [], "severity": "HIGH_SEVERITY", "enforcementActions": [], "notifiers": [], "policyVersion": "1.1", "policySections": [ { "sectionName": "Unauthorized Network Flow", "policyGroups": [ { "fieldName": "Unexpected Network Flow Detected", "booleanOperator": "OR", "negate": false, "values": [ { "value": "true" } ] } ] } ], "criteriaLocked": true, "mitreVectorsLocked": true, "isDefault": true, "source": "IMPERATIVE" }
+
   unauthorized-process-execution.json: |
-    {
-      "id": "89cae2e6-0cb7-4329-8692-c2c3717c1237",
-      "name": "Unauthorized Process Execution",
-      "description": "This policy generates a violation for any process execution that is not explicitly allowed by a locked process baseline for a given container specification within a Kubernetes deployment.",
-      "rationale": "A locked process baseline communicates high confidence that execution of a process not included in the baseline positively indicates malicious activity.",
-      "remediation": "Evaluate this process execution for malicious intent, examine other accessible resources for abnormal activity, then kill the pod in which this process executed.",
-      "disabled": false,
-      "severity": "HIGH_SEVERITY",
-      "categories": ["Anomalous Activity"],
-      "lifecycleStages": ["RUNTIME"]
-    }
+    { "id": "89cae2e6-0cb7-4329-8692-c2c3717c1237", "name": "Unauthorized Process Execution", "description": "This policy generates a violation for any process execution that is not explicitly allowed by a locked process baseline for a given container specification within a Kubernetes deployment.", "rationale": "A locked process baseline communicates high confidence that execution of a process not included in the baseline positively indicates malicious activity.", "
