@@ -4,7 +4,7 @@ metadata:
   name: acs-policy-drift-check
   namespace: rhacs-operator
 spec:
-  schedule: "*/1 * * * *" # runs every hour
+  schedule: "*/5 * * * *" # runs every hour
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
