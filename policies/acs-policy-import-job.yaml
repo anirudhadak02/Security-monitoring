@@ -9,7 +9,7 @@ spec:
       serviceAccountName: central
       containers:
       - name: policy-update
-        image: image: quay.io/bitnami/minideb:latest   # Includes both jq + curl
+        image: quay.io/bitnami/minideb:latest   # Includes both jq + curl
         command: ["/bin/sh", "-c"]
         args:
           - |
