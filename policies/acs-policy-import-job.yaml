@@ -9,10 +9,13 @@ spec:
       serviceAccountName: central
       containers:
       - name: policy-update
-        image: curlimages/curl:8.5.0
+        image: alpine:3.20
         command: ["/bin/sh", "-c"]
         args:
           - |
+            # Install required tools
+            apk add --no-cache curl jq
+
             CENTRAL_HOST=$(cat /creds/central_host)
             TOKEN=$(cat /creds/api_token)
 
@@ -46,3 +49,4 @@ spec:
       - name: policies
         configMap:
           name: acs-policies
+
