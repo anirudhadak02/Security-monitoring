@@ -12,7 +12,9 @@ data:
       "rationale": "Using secrets in environment variables may allow inspection into your secrets from the host or even through the orchestrator UI.",
       "remediation": "Migrate your secrets from environment variables to orchestrator secrets or your security team's secret management solution.",
       "disabled": false,
-      "severity": "HIGH_SEVERITY"
+      "severity": "HIGH_SEVERITY",
+      "categories": ["Security Best Practices"],
+      "lifecycleStages": ["DEPLOY"]
     }
   fixable-important-cves.json: |
     {
@@ -22,7 +24,9 @@ data:
       "rationale": "Known vulnerabilities make it easier for adversaries to exploit your application. You can fix these high-severity vulnerabilities by updating to a newer version of the affected component(s).",
       "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.",
       "disabled": false,
-      "severity": "HIGH_SEVERITY"
+      "severity": "HIGH_SEVERITY",
+      "categories": ["Vulnerability Management"],
+      "lifecycleStages": ["BUILD","DEPLOY"]
     }
   privilege-escalation.json: |
     {
@@ -32,7 +36,9 @@ data:
       "rationale": "A container process can run with more privileges than its parent process if the container's security context has the boolean setting allowPrivilegeEscalation enabled. In Kubernetes pods, this setting is true by default. Set the value to false if the pod is to run as a non-root user.",
       "remediation": "Verify that privileged escalation is required and cannot be provided with a subset of other controls. Disable privilege escalation by setting allowPrivilegeEscalation to false.",
       "disabled": false,
-      "severity": "MEDIUM_SEVERITY"
+      "severity": "MEDIUM_SEVERITY",
+      "categories": ["Privileges","Security Best Practices"],
+      "lifecycleStages": ["DEPLOY"],  
     }
   privileged-container.json: |
     {
@@ -42,7 +48,9 @@ data:
       "rationale": "Containers running as privileged represent greater post-exploitation risk by allowing an attacker to access all host devices, run a daemon in the container, etc.",
       "remediation": "Verify that privileged capabilities are required and cannot be provided with a subset of other controls.",
       "disabled": false,
-      "severity": "MEDIUM_SEVERITY"
+      "severity": "MEDIUM_SEVERITY",
+      "categories": ["Docker Cis","Privileges"],
+      "lifecycleStages": ["DEPLOY"] 
     }
   process-targeting-kubelet.json: |
     {
@@ -52,7 +60,9 @@ data:
       "rationale": "A pod communicating to a Kubernetes API from via command line is highly irregular",
       "remediation": "Look for open ports that may allow remote execution. Remove network utilities like curl and wget that allow these connections. Consider a firewall deny ingress firewall rule to the node serving the API",
       "disabled": false,
-      "severity": "HIGH_SEVERITY"
+      "severity": "HIGH_SEVERITY",
+      "categories": ["Kubernetes"],
+      "lifecycleStages": ["RUNTIME"]
     }
   unauthorized-network-flow.json: |
     {
@@ -62,7 +72,9 @@ data:
       "rationale": "The network baseline is a list of flows that are allowed, and once it is frozen, any flow outside that is a concern.",
       "remediation": "Evaluate this network flow. If deemed to be okay, add it to the baseline. If not, investigate further as required.",
       "disabled": false,
-      "severity": "HIGH_SEVERITY"
+      "severity": "HIGH_SEVERITY",
+      "categories": ["Anomalous Activity","Zero Trust"],
+      "lifecycleStages": ["RUNTIME"]
     }
   unauthorized-process-execution.json: |
     {
@@ -72,5 +84,7 @@ data:
       "rationale": "A locked process baseline communicates high confidence that execution of a process not included in the baseline positively indicates malicious activity.",
       "remediation": "Evaluate this process execution for malicious intent, examine other accessible resources for abnormal activity, then kill the pod in which this process executed.",
       "disabled": false,
-      "severity": "HIGH_SEVERITY"
+      "severity": "HIGH_SEVERITY",
+      "categories": ["Anomalous Activity"],
+      "lifecycleStages": ["RUNTIME"]
     }
