@@ -38,7 +38,7 @@ data:
       "disabled": false,
       "severity": "MEDIUM_SEVERITY",
       "categories": ["Privileges","Security Best Practices"],
-      "lifecycleStages": ["DEPLOY"],  
+      "lifecycleStages": ["DEPLOY"] 
     }
   privileged-container.json: |
     {
