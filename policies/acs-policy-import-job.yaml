@@ -9,19 +9,15 @@ spec:
       serviceAccountName: central
       containers:
       - name: policy-update
-        image: alpine:3.20
+        image: imega/jq:latest   # Includes both jq + curl
         command: ["/bin/sh", "-c"]
         args:
           - |
-            # Install required tools
-            apk add --no-cache curl jq
-
             CENTRAL_HOST=$(cat /creds/central_host)
             TOKEN=$(cat /creds/api_token)
 
             for f in /policies/*.json; do
               echo "Processing $f"
-              # Extract ID from JSON file
               id=$(jq -r '.id' "$f")
               if [ -n "$id" ] && [ "$id" != "null" ]; then
                 echo "Updating policy ID: $id"
