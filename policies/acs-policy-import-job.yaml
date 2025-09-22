@@ -13,6 +13,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
+            microdnf install -y jq curl
             CENTRAL_HOST=$(cat /creds/central_host)
             TOKEN=$(cat /creds/api_token)
 
